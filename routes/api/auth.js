@@ -3,7 +3,11 @@ const controllers = require("../../controller/auth");
 const { ctrlWrapper } = require("../../helpers/index");
 const { validateBody, authenticate } = require("../../middlewares");
 const upload = require("../../middlewares/upload");
-const { registerSchema, loginSchema } = require("../../schema/contacts");
+const {
+  registerSchema,
+  loginSchema,
+  verifyEmailSchema,
+} = require("../../schema/contacts");
 
 const router = express.Router();
 
@@ -11,6 +15,14 @@ router.post(
   "/register",
   validateBody(registerSchema),
   ctrlWrapper(controllers.register)
+);
+
+router.get("/verify/:verificationToken", controllers.verify);
+
+router.post(
+  "/verify",
+  validateBody(verifyEmailSchema),
+  controllers.resendEmail
 );
 
 router.post(
